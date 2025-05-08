@@ -1,0 +1,4 @@
+Flask
+torch
+transformers==4.51.1
+safetensors

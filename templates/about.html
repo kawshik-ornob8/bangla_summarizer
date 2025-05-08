@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Us | Bangla Text Summarizer</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <a href="/" class="logo">BanglaAI<span>Summarizer</span></a>
+            <div class="nav-links">
+                <a href="/" class="nav-item">Home</a>
+                <a href="/about" class="nav-item active">About</a>
+            </div>
+        </div>
+    </nav>
+
+    <main class="container">
+        <div class="hero">
+            <h1 class="slide-up">Development Team</h1>
+            <p class="slide-up delay-1">Meet the creators behind the Bangla AI Summarizer</p>
+        </div>
+
+        <div class="team-container">
+            <div class="team-card pop-in">
+                <!-- Kawshik Ahmed Ornob -->
+                <div class="member-card">
+                    <div class="member-image">
+                        <img src="https://scontent.fdac177-1.fna.fbcdn.net/v/t39.30808-1/495153507_9999137076784068_7209722439906789812_n.jpg?stp=c0.189.960.960a_dst-jpg_s160x160_tt6&_nc_cat=111&ccb=1-7&_nc_sid=1d2534&_nc_eui2=AeFTROwdyNPheb5Sh2Gzx5OF7EPTZqLIDGvsQ9NmosgMa4rKseBLJM4Hh8q8ebrbnM4gf32eQVkISWKHVzAbOvqe&_nc_ohc=dUa4jDNztCUQ7kNvwGMeS2B&_nc_oc=AdnF_6jrH_7ezedNtyjTkEBpj0jhgt3UmBChMNRMxJCIJuLRMqJE4hTaFY9RC_eg5gM&_nc_zt=24&_nc_ht=scontent.fdac177-1.fna&_nc_gid=f5Dx2QUkONfKOi3stTrfYQ&oh=00_AfK0sNfAsYq0IY6jlE_gJus7Gqsvozc3qAYpOOI9stvGpg&oe=68228A1B" alt="Kawshik Ahmed Ornob">
+                    </div>
+                    <h3>Kawshik Ahmed Ornob</h3>
+                    <p class="id-number">ID: 212-15-14750</p>
+                    <div class="member-bio">
+                        <p>Natural Language Processing Specialist</p>
+                        <p>Dept of CSE, Daffodil International University</p>
+                        <div class="social-links">
+                            <a href="https://github.com/kawshik-ornob8" target="_blank"><i class="fab fa-github"></i></a>
+                            <a href="https://www.linkedin.com/in/kawshik-ornob8/" target="_blank"><i class="fab fa-linkedin"></i></a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Bibakananda Roy Shuvo -->
+                <div class="member-card">
+                    <div class="member-image">
+                        <img src="https://media.licdn.com/dms/image/v2/D5603AQGeXgG_ooPj1A/profile-displayphoto-shrink_800_800/profile-displayphoto-shrink_800_800/0/1677145975962?e=1752105600&v=beta&t=EPUoU9gVqIwaKBgQ73hIuUCGVk4cKaadYJQ9nwLnN5Y" alt="Bibakananda Roy Shuvo">
+                    </div>
+                    <h3>Bibakananda Roy Shuvo</h3>
+                    <p class="id-number">ID: 212-15-14747</p>
+                    <div class="member-bio">
+                        <p>Machine Learning Engineer</p>
+                        <p>Dept of CSE, Daffodil International University</p>
+                        <div class="social-links">
+                            <a href="https://github.com/bibakanandaroyshuvo" target="_blank"><i class="fab fa-github"></i></a>
+                            <a href="https://www.linkedin.com/in/bibakananda-roy-shuvo5/" target="_blank"><i class="fab fa-linkedin"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="about-content card fade-in">
+                <h2>About the Project</h2>
+                <p>This Bangla Text Summarizer is built using the MT5 transformer model, providing efficient and accurate summarization of Bengali texts. The web interface is developed with Flask and features a modern, responsive design.</p>
+                
+                <div class="tech-stack">
+                    <div class="tech-item">
+                        <i class="fas fa-brain"></i>
+                        <span>MT5 Transformer Model</span>
+                    </div>
+                    <div class="tech-item">
+                        <i class="fab fa-python"></i>
+                        <span>Python Flask</span>
+                    </div>
+                    <div class="tech-item">
+                        <i class="fas fa-code"></i>
+                        <span>HTML5 & CSS3</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="{{ url_for('static', filename='animations.js') }}"></script>
+</body>
+</html>

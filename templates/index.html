@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bangla Text Summarizer | AI Powered</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div id="loading-overlay" class="loading-overlay">
+        <div class="loading-spinner"></div>
+    </div>
+
+    <nav class="navbar">
+        <div class="container">
+            <a href="/" class="logo">BanglaAI<span>Summarizer</span></a>
+            <div class="nav-links">
+                <a href="/" class="nav-item active">Home</a>
+                <a href="/about" class="nav-item">About</a>
+            </div>
+        </div>
+    </nav>
+
+    <main class="container">
+        <div class="hero">
+            <h1 class="slide-up">Bangla Text Summarizer</h1>
+            <p class="slide-up delay-1">AI-Powered Bengali Text Summarization using MT5 Model</p>
+        </div>
+
+        <div class="card fade-in">
+            <form class="summarizer-form" id="summarizer-form">
+                <div class="form-group">
+                    <textarea id="input_text" name="input_text" rows="6" placeholder="Enter your Bengali text here..." 
+                              class="floating-input"></textarea>
+                    <label class="input-label"></label>
+                </div>
+                <button type="submit" class="generate-btn">
+                    <i class="fas fa-rocket"></i> Generate Summary
+                </button>
+            </form>
+
+            <div id="result-container" class="result-box pop-in" style="display: none;">
+                <h3><i class="fas fa-file-alt"></i> Summary:</h3>
+                <div id="output_text" class="output"></div>
+            </div>
+        </div>
+    </main>
+
+    <script src="{{ url_for('static', filename='animations.js') }}"></script>
+</body>
+</html>

@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Bangla Summarizer – AI Text Simplification | Kawshik</title>
+    <meta name="description" content="An NLP-based tool for summarizing Bengali text using frequency-based and abstractive algorithms. Built with Python and Flask.">
+    <meta name="keywords" content="Bangla Summarizer, NLP, Python, Text Summarization, Artificial Intelligence, Flask, Kawshik Projects">
+    <meta name="author" content="Kawshik">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        /* =========================================
+           CSS Variables (Green/Teal Theme)
+        ========================================== */
+        :root {
+            /* Changed to Teal/Green for a "Data/AI" feel */
+            --primary-color: #10b981; 
+            --primary-hover: #059669;
+            --bg-color: #ffffff;
+            --text-color: #1f2937;
+            --text-muted: #6b7280;
+            --card-bg: #f9fafb;
+            --border-color: #e5e7eb;
+            --nav-bg: rgba(255, 255, 255, 0.9);
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            --transition: all 0.3s ease;
+            --radius: 12px;
+        }
+
+        [data-theme="dark"] {
+            --bg-color: #0f172a;
+            --text-color: #f3f4f6;
+            --text-muted: #9ca3af;
+            --card-bg: #1e293b;
+            --border-color: #374151;
+            --nav-bg: rgba(15, 23, 42, 0.9);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            transition: background-color 0.3s, color 0.3s;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        a { text-decoration: none; color: inherit; }
+        ul { list-style: none; }
+        
+        /* =========================================
+           Floating Navigation Buttons
+        ========================================== */
+        .float-btn {
+            position: fixed;
+            top: 20px;
+            width: 45px;
+            height: 45px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            color: var(--text-color);
+            border-radius: 50%;
+            cursor: pointer;
+            z-index: 1000;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+            font-size: 1.1rem;
+        }
+        .float-btn:hover { transform: scale(1.1); border-color: var(--primary-color); }
+        .back-home { left: 20px; }
+        .theme-toggle { right: 20px; }
+
+        /* =========================================
+           Layout & Typography
+        ========================================== */
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .section-padding { padding: 80px 0; }
+        
+        .section-title {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+        
+        .section-subtitle {
+            text-align: center;
+            color: var(--text-muted);
+            margin-bottom: 3rem;
+            max-width: 600px;
+            margin: 0 auto 3rem auto;
+        }
+
+        /* =========================================
+           1. Hero Section
+        ========================================== */
+        .hero {
+            min-height: 85vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding-top: 60px;
+        }
+
+        .hero-content h1 {
+            font-size: 3.5rem;
+            font-weight: 800;
+            margin-bottom: 10px;
+            /* Gradient adapted for Green/Teal */
+            background: linear-gradient(135deg, var(--primary-color), #3b82f6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            line-height: 1.2;
+        }
+
+        .hero-content h2 {
+            font-size: 1.5rem;
+            font-weight: 400;
+            color: var(--text-muted);
+            margin-bottom: 20px;
+        }
+
+        .hero-desc {
+            max-width: 700px;
+            margin: 0 auto 35px;
+            font-size: 1.125rem;
+            color: var(--text-color);
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+        }
+
+        .btn {
+            padding: 14px 28px;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: var(--transition);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            font-size: 1rem;
+        }
+
+        .btn-primary {
+            background-color: var(--primary-color);
+            color: white;
+            box-shadow: 0 4px 14px 0 rgba(16, 185, 129, 0.39);
+        }
+        .btn-primary:hover { background-color: var(--primary-hover); transform: translateY(-2px); }
+
+        .btn-outline {
+            border: 2px solid var(--border-color);
+            color: var(--text-color);
+        }
+        .btn-outline:hover { border-color: var(--primary-color); color: var(--primary-color); transform: translateY(-2px); }
+
+        /* =========================================
+           2. Overview & Content
+        ========================================== */
+        .overview-content {
+            background: var(--card-bg);
+            padding: 40px;
+            border-radius: var(--radius);
+            border: 1px solid var(--border-color);
+        }
+
+        /* =========================================
+           3. Features Grid
+        ========================================== */
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+        }
+
+        .feature-card {
+            background: var(--card-bg);
+            padding: 25px;
+            border-radius: var(--radius);
+            border: 1px solid var(--border-color);
+            transition: var(--transition);
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--primary-color);
+        }
+
+        .feature-icon {
+            font-size: 2rem;
+            color: var(--primary-color);
+            margin-bottom: 15px;
+        }
+
+        /* =========================================
+           4. GALLERY (Fixed Aspect Ratio)
+        ========================================== */
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 24px;
+        }
+
+        .gallery-item {
+            position: relative;
+            overflow: hidden;
+            border-radius: var(--radius);
+            border: 1px solid var(--border-color);
+            background: var(--card-bg);
+            aspect-ratio: 16 / 9; 
+            cursor: pointer;
+        }
+
+        .gallery-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover; 
+            object-position: top; 
+            transition: transform 0.5s ease;
+        }
+
+        .gallery-item:hover img { transform: scale(1.05); }
+
+        .gallery-caption {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 12px;
+            background: rgba(0, 0, 0, 0.75);
+            color: #fff;
+            text-align: center;
+            font-size: 0.9rem;
+            font-weight: 600;
+            transform: translateY(100%);
+            transition: transform 0.3s ease;
+        }
+        
+        .gallery-item:hover .gallery-caption {
+            transform: translateY(0);
+        }
+
+        /* =========================================
+           5. Split Section (Logic/Algorithm)
+        ========================================== */
+        .split-section {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 40px;
+            align-items: center;
+        }
+        .split-content { flex: 1; min-width: 300px; }
+        .split-visual { 
+            flex: 1; 
+            min-width: 300px; 
+            display: flex; justify-content: center; align-items: center;
+        }
+        
+        .bullet-list li {
+            margin-bottom: 12px;
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+        }
+        .bullet-list i { color: var(--primary-color); margin-top: 4px; }
+
+        /* =========================================
+           Mobile App-Like Optimization
+        ========================================== */
+        @media (max-width: 768px) {
+            .container { padding: 0 16px; }
+            .section-padding { padding: 50px 0; }
+            
+            .hero-content h1 { font-size: 2.5rem; }
+            .section-title { font-size: 1.75rem; }
+            
+            .btn-group { flex-direction: column; gap: 12px; }
+            .btn { width: 100%; padding: 16px; }
+
+            .gallery-grid { grid-template-columns: 1fr; }
+            
+            .float-btn { top: 15px; width: 40px; height: 40px; font-size: 1rem; }
+            .back-home { left: 15px; }
+            .theme-toggle { right: 15px; }
+
+            .gallery-caption { transform: translateY(0); background: rgba(0,0,0,0.6); }
+        }
+
+        /* Tech Badges */
+        .tech-container { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; }
+        .tech-badge {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            padding: 8px 16px;
+            border-radius: 50px;
+            font-weight: 500;
+            font-size: 0.9rem;
+            display: flex; align-items: center; gap: 8px;
+        }
+
+        /* Animation */
+        .fade-in { opacity: 0; transform: translateY(20px); transition: opacity 0.6s ease-out, transform 0.6s ease-out; }
+        .fade-in.visible { opacity: 1; transform: translateY(0); }
+
+        footer { text-align: center; padding: 40px 20px; border-top: 1px solid var(--border-color); color: var(--text-muted); margin-top: 40px; font-size: 0.9rem; }
+    </style>
+</head>
+<body class="light-mode">
+
+    <a href="https://kawshik.dev" class="float-btn back-home" aria-label="Back to Portfolio">
+        <i class="fas fa-arrow-left"></i>
+    </a>
+
+    <button id="theme-toggle" class="float-btn theme-toggle" aria-label="Toggle Dark Mode">
+        <i class="fas fa-moon"></i>
+    </button>
+
+    <header class="hero fade-in">
+        <div class="container hero-content">
+            <h1>Bangla Summarizer</h1>
+            <h2>NLP-Powered Text Simplification</h2>
+            <p class="hero-desc">
+                An intelligent Python application that condenses long Bengali articles into concise, meaningful summaries using Natural Language Processing.
+            </p>
+            <div class="btn-group">
+                <a href="https://github.com/kawshik-ornob8/bangla_summarizer" class="btn btn-primary" target="_blank"><i class="fab fa-github"></i> View on GitHub</a>
+            </div>
+        </div>
+    </header>
+
+    <section class="section-padding container fade-in">
+        <h2 class="section-title">Project Overview</h2>
+        <div class="overview-content">
+            <p>
+                <strong>Bangla Summarizer</strong> is designed to solve the problem of information overload in Bengali digital media. Manually reading through lengthy news articles or documents can be time-consuming. This tool automates the process by extracting the most significant sentences and generating a coherent summary.
+            </p>
+            <br>
+            <p>
+                Utilizing Python and standard NLP libraries, the system performs tokenization, stop-word removal, and word frequency analysis to rank sentences by importance. It is an essential tool for researchers, students, and anyone looking to digest Bangla content quickly.
+            </p>
+        </div>
+    </section>
+
+    <section class="section-padding container fade-in">
+        <h2 class="section-title">Key Features</h2>
+        <p class="section-subtitle">How the summarization engine works.</p>
+        
+        <div class="features-grid">
+            <article class="feature-card">
+                <i class="fas fa-language feature-icon"></i>
+                <h3>Bangla NLP Engine</h3>
+                <p>Custom-built tokenizer and stop-word list specifically optimized for the Bengali language.</p>
+            </article>
+
+            <article class="feature-card">
+                <i class="fas fa-file-alt feature-icon"></i>
+                <h3>Long Text Support</h3>
+                <p>Capable of processing large articles and documents without losing context.</p>
+            </article>
+
+            <article class="feature-card">
+                <i class="fas fa-list-ol feature-icon"></i>
+                <h3>Frequency Ranking</h3>
+                <p>Algorithms that identify high-value keywords to select the most relevant sentences.</p>
+            </article>
+
+            <article class="feature-card">
+                <i class="fas fa-sliders-h feature-icon"></i>
+                <h3>Adjustable Length</h3>
+                <p>Logic to control the compression ratio (e.g., summarize to 30% of original length).</p>
+            </article>
+
+            <article class="feature-card">
+                <i class="fas fa-copy feature-icon"></i>
+                <h3>One-Click Copy</h3>
+                <p>User-friendly interface allowing instant copying of the generated summary.</p>
+            </article>
+
+            <article class="feature-card">
+                <i class="fas fa-code feature-icon"></i>
+                <h3>Clean API / Backend</h3>
+                <p>Modular Python code structure that can be easily integrated into web apps (Flask/Django).</p>
+            </article>
+        </div>
+    </section>
+
+    <section class="section-padding container fade-in" style="background: var(--card-bg); border-radius: var(--radius); padding: 50px 30px;">
+        <div class="split-section">
+            <div class="split-content">
+                <h2 class="section-title" style="text-align: left; margin-bottom: 20px;">The Algorithm</h2>
+                <ul class="bullet-list">
+                    <li><i class="fas fa-check-circle"></i> <strong>Preprocessing:</strong> Cleaning text, removing special characters, and tokenizing sentences.</li>
+                    <li><i class="fas fa-check-circle"></i> <strong>Stop Word Removal:</strong> Filtering out common words (e.g., এবং, বা, কিন্তু) that carry little meaning.</li>
+                    <li><i class="fas fa-check-circle"></i> <strong>Word Scoring:</strong> Calculating Term Frequency (TF) to find significant keywords.</li>
+                    <li><i class="fas fa-check-circle"></i> <strong>Sentence Ranking:</strong> Scoring sentences based on the density of significant words.</li>
+                    <li><i class="fas fa-check-circle"></i> <strong>Extraction:</strong> Selecting the top N ranked sentences to form the final summary.</li>
+                </ul>
+            </div>
+            <div class="split-visual">
+                <i class="fas fa-brain" style="font-size: 5rem; color: var(--primary-color); opacity: 0.8;"></i>
+            </div>
+        </div>
+    </section>
+
+    <section class="section-padding container fade-in">
+        <h2 class="section-title">Interface Previews</h2>
+        <div class="gallery-grid">
+            <div class="gallery-item">
+                <img src="project_img/bangla_input.png" alt="Text Input Area" loading="lazy">
+                <div class="gallery-caption">Input Interface</div>
+            </div>
+            <div class="gallery-item">
+                <img src="project_img/bangla_result.png" alt="Summary Output" loading="lazy">
+                <div class="gallery-caption">Generated Summary</div>
+            </div>
+            <div class="gallery-item">
+                <img src="project_img/bangla_code.png" alt="Code Structure" loading="lazy">
+                <div class="gallery-caption">Algorithm Logic</div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section-padding container fade-in">
+        <h2 class="section-title">Tech Stack</h2>
+        <div class="tech-container">
+            <div class="tech-badge"><i class="fab fa-python"></i> Python 3</div>
+            <div class="tech-badge"><i class="fas fa-project-diagram"></i> NLTK / SpaCy</div>
+            <div class="tech-badge"><i class="fas fa-server"></i> Flask (Web Framework)</div>
+            <div class="tech-badge"><i class="fab fa-html5"></i> HTML5 & CSS3</div>
+            <div class="tech-badge"><i class="fas fa-robot"></i> NLP Algorithms</div>
+        </div>
+    </section>
+
+    <footer class="fade-in">
+        <p>&copy; 2026 Kawshik. All Rights Reserved.</p>
+        <p style="margin-top: 10px;">
+            <a href="mailto:contact@kawshik.dev">contact@kawshik.dev</a>
+        </p>
+    </footer>
+
+    <script>
+        // --- Dark Mode Logic ---
+        const toggleButton = document.getElementById('theme-toggle');
+        const icon = toggleButton.querySelector('i');
+        const currentTheme = localStorage.getItem('theme');
+
+        if (currentTheme === 'dark') {
+            document.documentElement.setAttribute('data-theme', 'dark');
+            icon.classList.remove('fa-moon');
+            icon.classList.add('fa-sun');
+        }
+
+        toggleButton.addEventListener('click', () => {
+            let theme = document.documentElement.getAttribute('data-theme');
+            if (theme === 'dark') {
+                document.documentElement.setAttribute('data-theme', 'light');
+                localStorage.setItem('theme', 'light');
+                icon.classList.remove('fa-sun');
+                icon.classList.add('fa-moon');
+            } else {
+                document.documentElement.setAttribute('data-theme', 'dark');
+                localStorage.setItem('theme', 'dark');
+                icon.classList.remove('fa-moon');
+                icon.classList.add('fa-sun');
+            }
+        });
+
+        // --- Scroll Animation Logic ---
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+    </script>
+</body>
+</html>
